@@ -1,0 +1,89 @@
+.dashboard {
+  height: calc(100vh - 4rem);
+  h2 {
+    padding: 2rem 2rem 1rem 2rem;
+    margin: 0;
+    font-weight: normal;
+  }
+  &__main {
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+  &__tabs {
+    padding: 0 2rem;
+    &__tab {
+      &:first-child {
+        margin-right: 1rem;
+      }
+      padding: 0.5rem;
+      display: inline-block;
+      text-decoration: none;
+      color: initial;
+      &.active {
+        color: #00acee;
+        background-color: #f2f2f2;
+      }
+    }
+  }
+  &__search {
+    padding: 1.5rem 2.5rem;
+    label {
+      display: block;
+      color: darken($color: #f2f2f2, $amount: 50);
+      margin-bottom: 0.5rem;
+    }
+    &__field {
+      display: flex;
+      align-items: center;
+    }
+    &__icon {
+      height: 24px;
+      width: 24px;
+      background-color: white;
+      position: relative;
+      right: 30px;
+      background-image: url("../../../assets/search.svg");
+      background-position: center;
+      background-repeat: no-repeat;
+      border: 0;
+    }
+    &__input {
+      font-size: 1rem;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      position: relative;
+      width: 20vw;
+    }
+  }
+  &__block {
+    &__data {
+      padding: 0 1rem;
+      background-color: white;
+      box-shadow: 0 0 3px #ccc;
+    }
+    padding: 0 2.5rem;
+    table {
+      margin: 0;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    tr {
+      border-bottom: 1px solid #ccc;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    td {
+      padding: 1rem 0;
+      &.gray {
+        color: darken($color: #f2f2f2, $amount: 50);
+      }
+    }
+    th {
+      font-weight: normal;
+      padding: 1rem 0;
+      color: darken($color: #f2f2f2, $amount: 50);
+      text-align: left;
+    }
+  }
+}

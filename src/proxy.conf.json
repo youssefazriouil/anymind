@@ -1,0 +1,10 @@
+{
+  "/api/*": {
+    "target": "https://anymind-recruitment-python-backend.adasia.biz/",
+    "pathRewrite": {
+      "^/api": ""
+    },
+    "secure": true,
+    "changeOrigin": true
+  }
+}

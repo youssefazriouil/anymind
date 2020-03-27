@@ -1,0 +1,61 @@
+<div class="dashboard">
+  <h2>Angular Twitter</h2>
+  <nav class="dashboard__tabs">
+    <a
+      routerLink="/hashtag"
+      routerLinkActive="active"
+      class="dashboard__tabs__tab"
+      (click)="toggleScreen('hashtag')"
+      >Hashtag search</a
+    >
+    <a
+      routerLink="/user"
+      routerLinkActive="active"
+      class="dashboard__tabs__tab"
+      (click)="toggleScreen('user')"
+      [ngClass]="{ active: !isHashtag }"
+      >User search</a
+    >
+  </nav>
+  <main class="dashboard__main">
+    <section class="dashboard__search">
+      <label for="search">{{ isHashtag ? "Hashtag" : "User" }} search</label>
+      <div class="dashboard__search__field">
+        <input
+          #searchInput
+          class="dashboard__search__input"
+          type="text"
+          placeholder="Search by {{ isHashtag ? 'Hashtag' : 'User' }}"
+          (keyup.enter)="onSubmit(searchInput.value)"
+        />
+        <button
+          class="dashboard__search__icon"
+          (click)="onSubmit(searchInput.value)"
+        ></button>
+      </div>
+    </section>
+    <section class="dashboard__block">
+      <div class="dashboard__block__data">
+        <table>
+          <tr>
+            <th>Tweet</th>
+            <th>Likes</th>
+            <th>Replies</th>
+            <th>Retweets</th>
+            <th>Hashtags</th>
+            <th>Date</th>
+          </tr>
+          <tr *ngFor="let tweet of hashTagTweets$ | async">
+            <td>{{ tweet.tweet }}</td>
+            <td class="gray">{{ tweet.likes }}</td>
+            <td class="gray">{{ tweet.replies }}</td>
+            <td class="gray">{{ tweet.retweets }}</td>
+            <td>{{ tweet.hashtags }}</td>
+            <td>{{ tweet.date }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="dashboard__pagination"></div>
+    </section>
+  </main>
+</div>
