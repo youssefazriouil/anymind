@@ -1,62 +1,95 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChange,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { formatDate } from "@angular/common";
-import { map, finalize, take, publishReplay, refCount } from "rxjs/operators";
+import {
+  map,
+  finalize,
+  take,
+  publishReplay,
+  refCount,
+  filter,
+  takeUntil,
+  isEmpty,
+} from "rxjs/operators";
 
 import testData from "../../service/testData";
-import { ITweet, IAPIResponse } from "../../interface";
-import { GetTweetsService } from "src/app/service/get-tweets.service";
-import { Observable, of } from "rxjs";
+import { ITweet } from "../../interface";
+import { FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-dashboard",
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.scss"],
 })
-export class DashboardComponent implements OnInit {
-  constructor(private getTweetsService: GetTweetsService) {}
-  isHashtag = true;
-  isLoading = false;
-  hashTagTweets$: Observable<ITweet[]>;
-  UserTweets: ITweet[];
+export class DashboardComponent implements OnInit, OnChanges {
+  @Input() currentPage;
+  @Input() currentPageNumber;
+  @Input() tweets: ITweet[];
+  @Output() getTweets = new EventEmitter<string>();
+  @Input() searchTerm: string;
+  @Input() pagesArray: number[];
+  @Input() currentPath: string;
+  @Input() isLoading: boolean;
+
+  isHashtag: boolean;
+  searchInput = new FormControl("");
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.hashTagTweets$ = of(this.mapResponse(testData));
+    this.isHashtag = this.currentPage === "Hashtag";
+    this.searchInput.setValue(this.searchTerm);
+    if (localStorage.getItem(this.currentPage)) {
+      this.tweets = JSON.parse(localStorage.getItem(this.currentPage));
+      this.currentPageNumber = parseInt(
+        localStorage.getItem(this.currentPage + "-pageNumber"),
+        10
+      );
+    }
+
+    if (!this.currentPageNumber) {
+      this.currentPageNumber = 1;
+    }
   }
 
-  onSubmit = (term) => {
+  ngOnChanges(changes: SimpleChanges) {
+    this.currentPage = changes.currentPage?.currentValue || this.currentPage;
+    this.currentPageNumber =
+      changes.currentPageNumber?.currentValue || this.currentPageNumber;
+    this.tweets = changes.tweets?.currentValue || this.tweets;
+    this.searchTerm = changes.searchTerm?.currentValue || this.searchTerm;
+    this.pagesArray = changes.pagesArray?.currentValue || this.pagesArray;
+    this.currentPath = changes.currentPath?.currentValue || this.currentPath;
+    this.isLoading = changes.isLoading?.currentValue || this.isLoading;
+  }
+
+  onSubmit = (term): void => {
     if (term) {
       this.isLoading = true;
-
-      this.hashTagTweets$ = this.getTweetsService.getByHashTag(term).pipe(
-        take(1),
-        map((res: IAPIResponse) => this.mapResponse(res)),
-        finalize(() => (this.isLoading = false))
-      );
+      this.getTweets.emit(term);
+      this.router.navigate([this.currentPath, "search", term]);
     }
   };
 
-  truncateTweet = (text: string): string => {
-    return text.length > 50 ? text.substring(0, 50) + "…" : text;
+  toggleScreen = (screen): void => {
+    const key = this.isHashtag ? "Hashtag" : "User";
+    this.saveTweets(key, this.tweets, this.currentPageNumber);
+    this.router.navigate([screen.toLowerCase()]);
   };
 
-  getHashTags = (hashtags: string[]): string => {
-    return hashtags.length > 0 ? hashtags.slice(0, 2).join(", ") : "-";
-  };
-
-  mapResponse = (data: IAPIResponse): ITweet[] => {
-    return data.results.map((tweet) => {
-      return {
-        tweet: this.truncateTweet(tweet.text),
-        likes: tweet.likes || "-",
-        replies: tweet.replies || "-",
-        retweets: tweet.retweets || "-",
-        hashtags: this.getHashTags(tweet.hashtags),
-        date: formatDate(tweet.date, "mediumDate", "en-US"),
-      };
-    });
-  };
-
-  toggleScreen = (screen) => {
-    this.isHashtag = screen === "hashtag";
+  saveTweets = (screen, tweets, pageNumber) => {
+    localStorage.setItem(screen, JSON.stringify(tweets));
+    localStorage.setItem(screen + "-pageNumber", pageNumber);
   };
 }

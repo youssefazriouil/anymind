@@ -2,30 +2,27 @@
   <h2>Angular Twitter</h2>
   <nav class="dashboard__tabs">
     <a
-      routerLink="/hashtag"
-      routerLinkActive="active"
+      [ngClass]="{ active: isHashtag }"
       class="dashboard__tabs__tab"
-      (click)="toggleScreen('hashtag')"
+      (click)="toggleScreen('Hashtag')"
       >Hashtag search</a
     >
     <a
-      routerLink="/user"
-      routerLinkActive="active"
-      class="dashboard__tabs__tab"
-      (click)="toggleScreen('user')"
       [ngClass]="{ active: !isHashtag }"
+      class="dashboard__tabs__tab"
+      (click)="toggleScreen('User')"
       >User search</a
     >
   </nav>
   <main class="dashboard__main">
     <section class="dashboard__search">
-      <label for="search">{{ isHashtag ? "Hashtag" : "User" }} search</label>
+      <label for="search">{{ currentPage }} search</label>
       <div class="dashboard__search__field">
         <input
-          #searchInput
+          [formControl]="searchInput"
           class="dashboard__search__input"
           type="text"
-          placeholder="Search by {{ isHashtag ? 'Hashtag' : 'User' }}"
+          placeholder="Search by {{ currentPage }}"
           (keyup.enter)="onSubmit(searchInput.value)"
         />
         <button
@@ -34,28 +31,56 @@
         ></button>
       </div>
     </section>
-    <section class="dashboard__block">
-      <div class="dashboard__block__data">
-        <table>
-          <tr>
-            <th>Tweet</th>
-            <th>Likes</th>
-            <th>Replies</th>
-            <th>Retweets</th>
-            <th>Hashtags</th>
-            <th>Date</th>
-          </tr>
-          <tr *ngFor="let tweet of hashTagTweets$ | async">
-            <td>{{ tweet.tweet }}</td>
-            <td class="gray">{{ tweet.likes }}</td>
-            <td class="gray">{{ tweet.replies }}</td>
-            <td class="gray">{{ tweet.retweets }}</td>
-            <td>{{ tweet.hashtags }}</td>
-            <td>{{ tweet.date }}</td>
-          </tr>
-        </table>
+    <section class="dashboard__block" [ngClass]="{ loading: isLoading }">
+      <div class="filter">
+        <div class="dashboard__block__data">
+          <table>
+            <tr>
+              <th>Tweet</th>
+              <th>Likes</th>
+              <th>Replies</th>
+              <th>Retweets</th>
+              <th>Hashtags</th>
+              <th>Date</th>
+            </tr>
+            <tr
+              *ngFor="
+                let tweet of tweets
+                  | slice: 10 * (currentPageNumber - 1):10 * currentPageNumber
+              "
+            >
+              <td>{{ tweet.tweet }}</td>
+              <td class="gray">{{ tweet.likes }}</td>
+              <td class="gray">{{ tweet.replies }}</td>
+              <td class="gray">{{ tweet.retweets }}</td>
+              <td>{{ tweet.hashtags }}</td>
+              <td>{{ tweet.date }}</td>
+            </tr>
+          </table>
+          <div class="dashboard__pagination">
+            <a
+              routerLink="{{ currentPath }}"
+              [ngClass]="{ active: i == currentPageNumber }"
+              [queryParams]="{ page: i }"
+              *ngFor="let i of pagesArray"
+              >{{ i }}</a
+            >
+            <!-- {{ currentPageNumber }} + {{ pagesArray.slice(-1)[0] }}
+            <a
+              *ngIf="currentPageNumber !== pagesArray.slice(-1)[0]"
+              routerLink="{{ currentPath }}"
+              [queryParams]="{ page: currentPageNumber + 1 }"
+            >
+              ▶
+            </a> -->
+          </div>
+        </div>
       </div>
-      <div class="dashboard__pagination"></div>
+      <mat-progress-spinner
+        *ngIf="isLoading"
+        class="dashboard__block__spinner"
+        [mode]="'indeterminate'"
+      ></mat-progress-spinner>
     </section>
   </main>
 </div>

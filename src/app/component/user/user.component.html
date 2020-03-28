@@ -1,0 +1,15 @@
+<app-dashboard
+  [currentPage]="currentPage"
+  [currentPageNumber]="currentPageNumber"
+  (setCurrentPageNumber)="setCurrentPageNumber($event)"
+  [tweets]="tweets"
+  (getTweets)="getTweets($event)"
+  (setTweets)="setTweets($event)"
+  [searchTerm]="searchTerm"
+  (setSearchTerm)="setSearchTerm($event)"
+  [pagesArray]="pagesArray"
+  (setPagesArray)="setPagesArray($event)"
+  [currentPath]="currentPath"
+  [isLoading]="isLoading"
+>
+</app-dashboard>
