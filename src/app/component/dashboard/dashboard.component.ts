@@ -1,28 +1,13 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
   Input,
   Output,
   EventEmitter,
   OnChanges,
-  SimpleChange,
   SimpleChanges,
-  ChangeDetectionStrategy,
 } from "@angular/core";
-import { formatDate } from "@angular/common";
-import {
-  map,
-  finalize,
-  take,
-  publishReplay,
-  refCount,
-  filter,
-  takeUntil,
-  isEmpty,
-} from "rxjs/operators";
 
-import testData from "../../service/testData";
 import { ITweet } from "../../interface";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";

@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { IAPIResponse, ITweet } from "../interface";
-import { map, take, finalize } from "rxjs/operators";
+import { map, take } from "rxjs/operators";
 import { formatDate } from "@angular/common";
 
 export const mapApiResponse = (obs: Observable<object>) => {
