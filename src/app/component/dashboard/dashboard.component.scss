@@ -1,5 +1,4 @@
 .dashboard {
-  height: calc(100vh - 4rem);
   h2 {
     padding: 2rem 2rem 1rem 2rem;
     margin: 0;
@@ -7,6 +6,7 @@
   }
   &__main {
     background-color: #f2f2f2;
+    min-height: calc(100vh - 7rem);
   }
   &__tabs {
     padding: 0 2rem;

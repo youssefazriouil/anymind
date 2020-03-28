@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { GetTweetsService } from "src/app/service/get-tweets.service";
 import { ActivatedRoute } from "@angular/router";
 import { mapApiResponse } from "../../utility/utils";
 import { finalize } from "rxjs/operators";
 import { ITweet } from "src/app/interface";
+import testData from "src/app/service/testData";
 
 @Component({
   selector: "app-user",
@@ -18,7 +19,7 @@ export class UserComponent implements OnInit {
   currentPage = "User";
   isActive: boolean;
   currentPath = "./user";
-  isLoading = false;
+  isLoading: boolean;
 
   constructor(
     private getTweetsService: GetTweetsService,
@@ -37,9 +38,17 @@ export class UserComponent implements OnInit {
     mapApiResponse(this.getTweetsService.getByUser(term)).subscribe(
       (tweets) => {
         this.tweets = tweets;
+        this.setPagesArray(tweets.length);
+        this.setSearchTerm(term);
         this.isLoading = false;
       }
     );
+    // mapApiResponse(of(testData)).subscribe((tweets) => {
+    //   this.tweets = tweets;
+    //   this.setPagesArray(tweets.length);
+    //   this.setSearchTerm(term);
+    //   this.isLoading = false;
+    // });
   };
 
   setTweets = (tweets) => {
@@ -53,9 +62,5 @@ export class UserComponent implements OnInit {
   setPagesArray = (count: number) => {
     const pages = Math.floor(count / 10) + (count % 10 > 0 ? 1 : 0);
     this.pagesArray = [...Array(pages).keys()].map((i) => i + 1);
-  };
-
-  setCurrentPageNumber = (pageNumber: number) => {
-    this.currentPageNumber = pageNumber;
   };
 }

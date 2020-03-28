@@ -17,7 +17,7 @@ export class HashtagComponent implements OnInit {
   currentPage = "Hashtag";
   isActive: boolean;
   currentPath = "./hashtag";
-  isLoading = false;
+  isLoading: boolean;
 
   constructor(
     private getTweetsService: GetTweetsService,
@@ -36,6 +36,8 @@ export class HashtagComponent implements OnInit {
     mapApiResponse(this.getTweetsService.getByHashTag(term)).subscribe(
       (tweets) => {
         this.tweets = tweets;
+        this.setPagesArray(tweets.length);
+        this.setSearchTerm(term);
         this.isLoading = false;
       }
     );
@@ -52,9 +54,5 @@ export class HashtagComponent implements OnInit {
   setPagesArray = (count: number) => {
     const pages = Math.floor(count / 10) + (count % 10 > 0 ? 1 : 0);
     this.pagesArray = [...Array(pages).keys()].map((i) => i + 1);
-  };
-
-  setCurrentPageNumber = (pageNumber: number) => {
-    this.currentPageNumber = pageNumber;
   };
 }

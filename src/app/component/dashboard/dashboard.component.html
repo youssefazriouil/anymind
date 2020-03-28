@@ -59,20 +59,22 @@
           </table>
           <div class="dashboard__pagination">
             <a
-              routerLink="{{ currentPath }}"
+              [routerLink]="['search', searchTerm, 'page', i]"
               [ngClass]="{ active: i == currentPageNumber }"
-              [queryParams]="{ page: i }"
               *ngFor="let i of pagesArray"
               >{{ i }}</a
             >
-            <!-- {{ currentPageNumber }} + {{ pagesArray.slice(-1)[0] }}
             <a
               *ngIf="currentPageNumber !== pagesArray.slice(-1)[0]"
-              routerLink="{{ currentPath }}"
-              [queryParams]="{ page: currentPageNumber + 1 }"
+              [routerLink]="[
+                'search',
+                searchTerm,
+                'page',
+                currentPageNumber + 1
+              ]"
             >
               ▶
-            </a> -->
+            </a>
           </div>
         </div>
       </div>

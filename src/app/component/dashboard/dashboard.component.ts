@@ -50,13 +50,6 @@ export class DashboardComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.isHashtag = this.currentPage === "Hashtag";
     this.searchInput.setValue(this.searchTerm);
-    if (localStorage.getItem(this.currentPage)) {
-      this.tweets = JSON.parse(localStorage.getItem(this.currentPage));
-      this.currentPageNumber = parseInt(
-        localStorage.getItem(this.currentPage + "-pageNumber"),
-        10
-      );
-    }
 
     if (!this.currentPageNumber) {
       this.currentPageNumber = 1;
@@ -83,13 +76,6 @@ export class DashboardComponent implements OnInit, OnChanges {
   };
 
   toggleScreen = (screen): void => {
-    const key = this.isHashtag ? "Hashtag" : "User";
-    this.saveTweets(key, this.tweets, this.currentPageNumber);
     this.router.navigate([screen.toLowerCase()]);
-  };
-
-  saveTweets = (screen, tweets, pageNumber) => {
-    localStorage.setItem(screen, JSON.stringify(tweets));
-    localStorage.setItem(screen + "-pageNumber", pageNumber);
   };
 }
