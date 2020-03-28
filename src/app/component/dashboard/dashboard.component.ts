@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit, OnChanges {
 
   isHashtag: boolean;
   searchInput = new FormControl("");
+  lastPageNumber: number;
 
   constructor(private router: Router) {}
 
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit, OnChanges {
     if (!this.currentPageNumber) {
       this.currentPageNumber = 1;
     }
+    this.lastPageNumber = this.pagesArray ? this.pagesArray.slice(-1)[0] : 1;
   }
 
   // listen to changes that are emitted from parent components and set bound values accordingly. If no change was found, reset old value

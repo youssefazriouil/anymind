@@ -61,6 +61,8 @@ export class UserComponent implements OnInit, OnDestroy {
     if (this.paramSub) {
       this.paramSub.unsubscribe();
     }
-    this.apiSub.unsubscribe();
+    if (this.apiSub) {
+      this.apiSub.unsubscribe();
+    }
   }
 }

@@ -65,7 +65,7 @@
               >{{ i }}</a
             >
             <a
-              *ngIf="currentPageNumber !== pagesArray.slice(-1)[0]"
+              *ngIf="currentPageNumber !== lastPageNumber"
               [routerLink]="[
                 'search',
                 searchTerm,
