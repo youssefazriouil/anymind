@@ -12,44 +12,6 @@ const routes: Routes = [
   },
   {
     path: "hashtag",
-    component: DashboardComponent,
-    children: [
-      {
-        path: "",
-        redirectTo: "page/1",
-        pathMatch: "full",
-      },
-      {
-        path: "page/:page",
-        data: { test: "ja" },
-        component: DashboardComponent,
-      },
-    ],
-  },
-  {
-    path: "user",
-    component: DashboardComponent,
-    data: {
-      currentPage: "user",
-      currentPageNumber: 1,
-    },
-    children: [
-      {
-        path: "page/:page",
-        component: DashboardComponent,
-      },
-    ],
-  },
-];
-
-const routes2 = [
-  {
-    path: "",
-    redirectTo: "hashtag",
-    pathMatch: "full",
-  },
-  {
-    path: "hashtag",
     component: HashtagComponent,
     children: [
       {
@@ -76,10 +38,14 @@ const routes2 = [
       },
     ],
   },
+  {
+    path: "**",
+    redirectTo: "hashtag",
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes2)],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

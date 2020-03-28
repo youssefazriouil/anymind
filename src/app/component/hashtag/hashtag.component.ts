@@ -26,6 +26,7 @@ export class HashtagComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
+  // Listen for route changes if any, and set current values accordingly
   ngOnInit() {
     this.paramSub = this.route.firstChild?.params.subscribe((p) => {
       this.searchTerm = p.searchTerm;
@@ -45,14 +46,11 @@ export class HashtagComponent implements OnInit, OnDestroy {
     });
   };
 
-  setTweets = (tweets) => {
-    this.tweets = tweets;
-  };
-
   setSearchTerm = (term: string) => {
     this.searchTerm = term;
   };
 
+  // Create pagination based on number of tweets
   setPagesArray = (count: number) => {
     const pages = Math.floor(count / 10) + (count % 10 > 0 ? 1 : 0);
     this.pagesArray = [...Array(pages).keys()].map((i) => i + 1);

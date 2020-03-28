@@ -3,6 +3,7 @@ import { IAPIResponse, ITweet } from "../interface";
 import { map, take } from "rxjs/operators";
 import { formatDate } from "@angular/common";
 
+// map the API response into the format that we need and auto unsubscribe with take.
 export const mapApiResponse = (obs: Observable<object>) => {
   return obs.pipe(
     map((res: IAPIResponse) => mapResponse(res)),

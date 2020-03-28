@@ -41,6 +41,7 @@ export class DashboardComponent implements OnInit, OnChanges {
     }
   }
 
+  // listen to changes that are emitted from parent components and set bound values accordingly. If no change was found, reset old value
   ngOnChanges(changes: SimpleChanges) {
     this.currentPage = changes.currentPage?.currentValue || this.currentPage;
     this.currentPageNumber =
@@ -52,6 +53,7 @@ export class DashboardComponent implements OnInit, OnChanges {
     this.isLoading = changes.isLoading?.currentValue || this.isLoading;
   }
 
+  // if term was submitted, emit change back to parent component and then navigate to the search path
   onSubmit = (term): void => {
     if (term) {
       this.isLoading = true;
